@@ -1,19 +1,33 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-
+const passwordValidator = require('password-validator');
+const schema = new passwordValidator();
+schema.is().min(8)                                    // Minimum length 8
+schema.is().max(100)                                  // Maximum length 100
+schema.has().uppercase()                              // Must have uppercase letters
+schema.has().lowercase()                              // Must have lowercase letters
+schema.has().digits(2)                                // Must have at least 2 digits
+schema.has().not().spaces()                           // Should not have spaces
+schema.is().not().oneOf(['Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'azertyuiop', 'azerty']); // Blacklist these values
+ 
 exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        email: req.body.email,
-        password: hash
-      });
-      user.save()
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error }));
+  if (schema.validate(req.body.password)) {
+    bcrypt.hash(req.body.password, 10)
+      .then(hash => {
+        const user = new User({
+          email: req.body.email,
+          password: hash
+        });
+        user.save()
+          .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
+          .catch(error => res.status(400).json({ error }));
+      })
+      .catch(error => res.status(500).json({ error }));
+  } else {
+    console.log(schema.validate(req.body.password, { list: true }));
+    res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
+  }
 };
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
