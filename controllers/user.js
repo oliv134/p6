@@ -3,7 +3,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
-// Paasword Validation
+// Password Validation Schema
 schema.is().min(8)                                    // Minimum length 8
 schema.is().max(100)                                  // Maximum length 100
 schema.has().uppercase()                              // Must have uppercase letters

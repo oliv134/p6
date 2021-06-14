@@ -52,7 +52,6 @@
       </ul>
     </li>
     <li><a href="#usage">Usage</a></li>
-    <li><a href="#documentation">Documentation</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contribution">Contribution</a></li>
     <li><a href="#licence">Licence</a></li>
@@ -129,16 +128,6 @@ Le schéma du mot de passe est:
 * Should not have spaces,
 * 'Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'azertyuiop', 'azerty' are Blacklisted.
 
-
-<!-- USAGE EXAMPLES -->
-## Documentation
-
-La documentation des js peut être générée par
-   ```sh
-   npm run doc
-   ```
-
-Elle sera ensuite disponible dans ./docs/
 
 <!-- ROADMAP -->
 ## Roadmap

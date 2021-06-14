@@ -1,7 +1,7 @@
 const { json } = require("express");
 const Sauce = require("../models/sauce");
 const fs = require("fs");
-const sauce = require("../models/sauce");
+//const sauce = require("../models/sauce");
 
 /**
 * Controller allowing to create Sauce
