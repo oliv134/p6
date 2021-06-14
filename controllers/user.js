@@ -3,6 +3,7 @@ const User = require('../models/user');
 const jwt = require('jsonwebtoken');
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
+// Paasword Validation
 schema.is().min(8)                                    // Minimum length 8
 schema.is().max(100)                                  // Maximum length 100
 schema.has().uppercase()                              // Must have uppercase letters
@@ -10,7 +11,10 @@ schema.has().lowercase()                              // Must have lowercase let
 schema.has().digits(2)                                // Must have at least 2 digits
 schema.has().not().spaces()                           // Should not have spaces
 schema.is().not().oneOf(['Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'azertyuiop', 'azerty']); // Blacklist these values
- 
+
+/**
+* Controller allowing to create a new user account
+*/
 exports.signup = (req, res, next) => {
   if (schema.validate(req.body.password)) {
     bcrypt.hash(req.body.password, 10)
@@ -29,6 +33,10 @@ exports.signup = (req, res, next) => {
     res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
   }
 };
+
+/**
+* Controller allowing to log in
+*/
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {
