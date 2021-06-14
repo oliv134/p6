@@ -67,7 +67,7 @@
 ![screeenshot](./images/screenshot.jpg)
 
 
-Ceci la partie frontend du site So Pekocko.
+Ceci est la partie frontend du site So Pekocko.
 C'est une application d’évaluation de ses sauces piquantes, appelée “Piquante”.
 Même si l’application deviendra peut-être un magasin en ligne dans un futur proche, il permet aux utilisateurs d’ajouter leurs sauces préférées et de liker ou disliker les sauces ajoutées par les autres utilisateurs.
 
@@ -107,6 +107,7 @@ Vous devez avoir npm d'installé sur votre système.
 ## Usage
 
 Le frontend est disponible ici: [https://github.com/OpenClassrooms-Student-Center/dwj-projet6](https://github.com/OpenClassrooms-Student-Center/JWDP5.git)
+Vous devez installer node-sass 4.14.1.
 
 Il est accessible via [http://localhost:4200/](http://localhost:4200/)
 
@@ -115,7 +116,18 @@ Pour ce projet, vous excutez le backend via:
    ```sh
    npm start
    ```
-Le backemd s'exécute.
+Le backend s'exécute.
+
+Le schéma du mot de passe est:
+
+* Minimum length 8,
+* Maximum length 100,
+* Must have uppercase letters,
+* Must have lowercase letters,
+* Must have at least 2 digits,
+* Should not have spaces,
+* 'Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'azertyuiop', 'azerty' are Blacklisted.
+
 
 <!-- USAGE EXAMPLES -->
 ## Documentation

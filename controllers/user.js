@@ -29,7 +29,7 @@ exports.signup = (req, res, next) => {
       })
       .catch(error => res.status(500).json({ error }));
   } else {
-    console.log(schema.validate(req.body.password, { list: true }));
+    (schema.validate(req.body.password, { list: true }));
     res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
   }
 };

@@ -7,7 +7,7 @@ const sauce = require("../models/sauce");
 * Controller allowing to create Sauce
 */
 exports.createThing = (req, res, next) => {
-  console.log(req.body.sauce);
+  //console.log(req.body.sauce);
   const sauceObject = JSON.parse(req.body.sauce);
   delete sauceObject._id;
   const sauce = new Sauce({
@@ -80,10 +80,10 @@ exports.deleteThing = (req, res, next) => {
 * Controller allowing to like, unlike, dislike or undislinke a sauce
 */
 exports.likeThing = (req, res, next) => {
-  console.log(req.body.userId);
+  //console.log(req.body.userId);
   switch (req.body.like) {
     case 1: // like sauce
-      console.log("like");
+      //console.log("like");
       Sauce.updateOne(
         { _id: req.params.id },
         { $inc: { likes: 1 },
@@ -94,7 +94,7 @@ exports.likeThing = (req, res, next) => {
         .catch((error) => res.status(404).json({ error }));
       break;
     case 0: // cancel like or dislike
-      console.log("cancel");
+      //console.log("cancel");
       sauce.findOne({ _id: req.params.id })
         .then(sauce => {
           if (sauce.usersLiked.includes(req.body.userId)) {
@@ -124,7 +124,7 @@ exports.likeThing = (req, res, next) => {
       break;
       
     case -1: // dislike sauce
-      console.log("dislike");
+      //console.log("dislike");
       Sauce.updateOne(
         { _id: req.params.id },
         { $inc: { dislikes: 1 } ,
