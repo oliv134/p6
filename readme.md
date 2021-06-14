@@ -106,7 +106,8 @@ Vous devez avoir npm d'installé sur votre système.
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Le frontend est disponible ici: [https://github.com/OpenClassrooms-Student-Center/dwj-projet6](https://github.com/OpenClassrooms-Student-Center/JWDP5.git)
+Le frontend est disponible ici: [https://github.com/OpenClassrooms-Student-Center/dwj-projet6](https://github.com/OpenClassrooms-Student-Center/JWDP5.git).
+
 Vous devez installer node-sass 4.14.1.
 
 Il est accessible via [http://localhost:4200/](http://localhost:4200/)
