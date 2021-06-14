@@ -1,7 +1,7 @@
 const { json } = require("express");
 const Sauce = require("../models/sauce");
 const fs = require("fs");
-//const sauce = require("../models/sauce");
+
 
 /**
 * Controller allowing to create Sauce
@@ -88,14 +88,13 @@ exports.likeThing = (req, res, next) => {
         { _id: req.params.id },
         { $inc: { likes: 1 },
          $push: { usersLiked: req.body.userId } }
-      )
-      
+      )      
         .then((sauce) => res.status(200).json(sauce))
         .catch((error) => res.status(404).json({ error }));
       break;
     case 0: // cancel like or dislike
       //console.log("cancel");
-      sauce.findOne({ _id: req.params.id })
+      Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
           if (sauce.usersLiked.includes(req.body.userId)) {
             Sauce.updateOne(
