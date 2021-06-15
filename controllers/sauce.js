@@ -2,6 +2,8 @@ const { json } = require("express");
 const Sauce = require("../models/sauce");
 const fs = require("fs");
 
+// regex injection prevent
+const regex = /^[a-zA-Z0-9 _.,!()&]+$/;
 
 /**
 * Controller allowing to create Sauce
@@ -10,6 +12,12 @@ exports.createSauce = (req, res, next) => {
   //console.log(req.body.sauce);
   const sauceObject = JSON.parse(req.body.sauce);
   delete sauceObject._id;
+  // Check format
+  if (testSauce(sauceObject))
+  {
+    res.status(400).json({ message: "Syntaxe incorrecte" })
+  }
+
   const sauce = new Sauce({
     ...sauceObject,
     imageUrl: `${req.protocol}://${req.get("host")}/images/${
@@ -19,6 +27,7 @@ exports.createSauce = (req, res, next) => {
   sauce.save()
     .then(() => res.status(201).json({ message: "Sauce enregistrée !" }))
     .catch((error) => res.status(400).json({ error }));
+  
 };
 
 /**
@@ -36,7 +45,7 @@ exports.getOneSauce = (req, res, next) => {
 exports.getAllSauces = (req, res, next) => {
   Sauce.find()
     .then((sauces) => res.status(200).json(sauces))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => res.status(404).json({ error }));
 };
 
 /**
@@ -51,6 +60,10 @@ exports.modifySauce = (req, res, next) => {
         }`,
       }
     : { ...req.body };
+    if (testSauce(sauceObject))
+    {
+      res.status(400).json({ message: "Syntaxe incorrecte" })
+    }
   Sauce.updateOne(
     { _id: req.params.id },
     { ...sauceObject, _id: req.params.id }
@@ -89,7 +102,7 @@ exports.likeSauce = (req, res, next) => {
          $push: { usersLiked: req.body.userId } } // and add userId to usersLiked
       )      
         .then((sauce) => res.status(200).json(sauce))
-        .catch((error) => res.status(404).json({ error }));
+        .catch((error) => res.status(400).json({ error }));
       break;
     case 0: // cancel like or dislike
       //console.log("cancel");
@@ -132,8 +145,17 @@ exports.likeSauce = (req, res, next) => {
       )
       
         .then((sauce) => res.status(200).json(sauce))
-        .catch((error) => res.status(404).json({ error }));
+        .catch((error) => res.status(400).json({ error }));
       break;
-  }
+  };
+};
 
+const testSauce = (sauceObject) => {
+  return (
+    !regex.test(sauceObject.name) ||
+    !regex.test(sauceObject.manufacturer) ||
+    !regex.test(sauceObject.description) ||
+    !regex.test(sauceObject.mainPepper) ||
+    !regex.test(sauceObject.heat)
+  )
 };

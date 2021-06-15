@@ -5,7 +5,8 @@ const MIME_TYPES = {
   'image/jpeg': 'jpg',
   'image/png': 'png'
 };
-// Middleware used for handling multipart/form-data, which is primarily used for uploading files. 
+/* Middleware used for handling multipart/form-data,
+   which is primarily used for uploading files. */
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, 'images');

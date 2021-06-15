@@ -33,7 +33,7 @@ exports.signup = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {
         const user = new User({
-          //email: maskData.maskEmail2(req.body.email, emailMask2Options) // With maskdata
+          //email: maskData.maskEmail2(req.body.email, emailMask2Options), // With maskdata
           email: req.body.email,
           password: hash
         });
@@ -45,7 +45,7 @@ exports.signup = (req, res, next) => {
   } else {
     //(schema.validate(req.body.password, { list: true }));
     res.status(400).json({ message: schema.validate(req.body.password, { list: true })})
-  }
+  } 
 };
 
 /**
