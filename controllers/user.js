@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const mailValidator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator();
 const maskData = require("maskdata");
@@ -29,6 +30,11 @@ schema.is().not().oneOf(['Passw0rd', 'Password123', 'qwertyuiop', 'qwerty', 'aze
 * Controller allowing to create a new user account
 */
 exports.signup = (req, res, next) => {
+  if (!mailValidator.validate(req.body.email)) {
+    // Making sure the amil is an email
+    return res.status(400).json({ message: "Email incorrect" })
+  };
+
   if (schema.validate(req.body.password)) {
     bcrypt.hash(req.body.password, 10)
       .then(hash => {

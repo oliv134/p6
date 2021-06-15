@@ -62,7 +62,7 @@ exports.modifySauce = (req, res, next) => {
     : { ...req.body };
     if (testSauce(sauceObject))
     {
-      res.status(400).json({ message: "Syntaxe incorrecte" })
+      return res.status(400).json({ message: "Syntaxe incorrecte" })
     }
   Sauce.updateOne(
     { _id: req.params.id },
