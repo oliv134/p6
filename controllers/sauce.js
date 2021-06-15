@@ -6,7 +6,7 @@ const fs = require("fs");
 /**
 * Controller allowing to create Sauce
 */
-exports.createThing = (req, res, next) => {
+exports.createSauce = (req, res, next) => {
   //console.log(req.body.sauce);
   const sauceObject = JSON.parse(req.body.sauce);
   delete sauceObject._id;
@@ -16,16 +16,15 @@ exports.createThing = (req, res, next) => {
       req.file.filename
     }`,
   });
-  sauce
-    .save()
-    .then(() => res.status(201).json({ message: "Objet enregistré !" }))
+  sauce.save()
+    .then(() => res.status(201).json({ message: "Sauce enregistrée !" }))
     .catch((error) => res.status(400).json({ error }));
 };
 
 /**
 * Controller allowing to get One Sauce
 */
-exports.getThing = (req, res, next) => {
+exports.getOneSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => res.status(200).json(sauce))
     .catch((error) => res.status(404).json({ error }));
@@ -34,7 +33,7 @@ exports.getThing = (req, res, next) => {
 /**
 * Controller allowing to get All Sauces
 */
-exports.getThings = (req, res, next) => {
+exports.getAllSauces = (req, res, next) => {
   Sauce.find()
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => res.status(400).json({ error }));
@@ -43,7 +42,7 @@ exports.getThings = (req, res, next) => {
 /**
 * Controller allowing to modify One Sauce
 */
-exports.modifyThing = (req, res, next) => {
+exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file
     ? {
         ...JSON.parse(req.body.sauce),
@@ -56,14 +55,14 @@ exports.modifyThing = (req, res, next) => {
     { _id: req.params.id },
     { ...sauceObject, _id: req.params.id }
   )
-    .then(() => res.status(200).json({ message: "Objet modifié !" }))
+    .then(() => res.status(200).json({ message: "Sauce modifiée !" }))
     .catch((error) => res.status(400).json({ error }));
 };
 
 /**
 * Controller allowing to delete One Sauce
 */
-exports.deleteThing = (req, res, next) => {
+exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id })
     .then((sauce) => {
       const filename = sauce.imageUrl.split("/images/")[1];
@@ -79,15 +78,15 @@ exports.deleteThing = (req, res, next) => {
 /**
 * Controller allowing to like, unlike, dislike or undislinke a sauce
 */
-exports.likeThing = (req, res, next) => {
+exports.likeSauce = (req, res, next) => {
   //console.log(req.body.userId);
   switch (req.body.like) {
     case 1: // like sauce
       //console.log("like");
       Sauce.updateOne(
         { _id: req.params.id },
-        { $inc: { likes: 1 },
-         $push: { usersLiked: req.body.userId } }
+        { $inc: { likes: 1 }, // increase likes by 1
+         $push: { usersLiked: req.body.userId } } // and add userId to usersLiked
       )      
         .then((sauce) => res.status(200).json(sauce))
         .catch((error) => res.status(404).json({ error }));
@@ -96,6 +95,7 @@ exports.likeThing = (req, res, next) => {
       //console.log("cancel");
       Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
+          // if userId is in usersLiked then decrement like by 1 and remove userId from userLiked
           if (sauce.usersLiked.includes(req.body.userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -106,6 +106,7 @@ exports.likeThing = (req, res, next) => {
             )
               .then((sauce) => { res.status(200).json({ message: 'Like supprimé !' }) })
               .catch(error => res.status(400).json({ error }))
+            // else the user is in usersDisliked. So decrement disklike by 1 and remove userId from userDisliked
           } else if (sauce.usersDisliked.includes(req.body.userId)) {
             Sauce.updateOne(
               { _id: req.params.id },
@@ -126,8 +127,8 @@ exports.likeThing = (req, res, next) => {
       //console.log("dislike");
       Sauce.updateOne(
         { _id: req.params.id },
-        { $inc: { dislikes: 1 } ,
-         $push: { usersDisliked: req.body.userId } }
+        { $inc: { dislikes: 1 } , // increase dislikes by 1
+         $push: { usersDisliked: req.body.userId } } // and add userId to usersDisliked
       )
       
         .then((sauce) => res.status(200).json(sauce))

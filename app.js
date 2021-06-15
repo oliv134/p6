@@ -1,12 +1,15 @@
 // Requires
 const express = require('express');
 const mongoose = require('mongoose');
+const fs = require('fs');
+const path = require('path');
 
 
 // Security Requires
-const path = require('path');
 const helmet = require('helmet');
 const rateLimit = require("express-rate-limit");
+const mongoSanitize = require('express-mongo-sanitize');
+const morgan = require('morgan');
 require('dotenv').config();
 
 // Routes
@@ -49,8 +52,27 @@ app.use((req, res, next) => {
 //for handling form data 
 app.use(express.json()); // replace app.use(bodyParser.json()) who's deprecated!!
 
+// Middleware Express 4.x qui nettoie les données fournies par l'utilisateur pour empêcher l'injection d'opérateur MongoDB
+app.use(
+  mongoSanitize({
+    onSanitize: ({ req, key }) => {
+      console.warn(`This request[${key}] is sanitized`, req);
+    },
+  }),
+);
+
+// middleware Morgan pour créer des logs
+// au format combiné Apache dans STDOUT
+/*app.use(morgan('combined', {
+  skip: function (req, res) { return res.statusCode < 400));*/
+
+// create a write stream (in append mode)
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
+// setup the logger
+app.use(morgan('combined', { stream: accessLogStream }))
+
 // Setting routes
 app.use('/api/sauces', sauceRoutes); 
 app.use('/api/auth', userRoutes);
 
-  module.exports = app;
+module.exports = app;

@@ -9,13 +9,14 @@ const userSchema = mongoose.Schema({
     unique: true,
     lowercase: true,
     maxlength: [320, 'Email can\'t be greater than 320 characters'],
-    // Using mongoose-unique-validator so two acounts can't be created with the same email
-  },
+    },
   password: {
     type: String,
-    required: true },
+    required: true 
+  },
 });
 
+// Using mongoose-unique-validator so two acounts can't be created with the same email
 userSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model('User', userSchema);
